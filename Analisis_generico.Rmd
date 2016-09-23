@@ -4,18 +4,20 @@ output: word_document
 ---
 # Definir directorio de trabajo
 
-Aqui probablemente el codigo te dara problemas, porque queremos definir como directorio de trabajo la carpeta de COPLAS porque los archivos estan ahi. Como este Markdown esta dentro de un Proyecto con su carpeta asociada, R entiende que el directorio es ese (".../Instar/implementaciones/instar_baza/scripts/git_Instar_baza"). Estrictamente hablando deberiamos escribir el codigo de manera que cuando llamemos a un archivo le demos el path apropiado ("...\Instar\calibracion_validacion\fuentes_datos_validacion\COPLAS_PLAGAS"). Pero tambien se puede definir el directorio de manera manual (Session > Set Working Directory > Choose Directory), y asi R si acepta que sea una carpeta distinta a donde esta el proyecto. Por mi las dos opciones valen, la que te sea mas facil :)
+Comprobar que corresponde a la carpeta "...Instar/implementaciones/instar_baza/Analisis_INSTAR"
 
-He definido el WD de manera manual. 
+~~Aqui probablemente el codigo te dara problemas, porque queremos definir como directorio de trabajo la carpeta de COPLAS porque los archivos estan ahi. Como este Markdown esta dentro de un Proyecto con su carpeta asociada, R entiende que el directorio es ese (".../Instar/implementaciones/instar_baza/scripts/git_Instar_baza"). Estrictamente hablando deberiamos escribir el codigo de manera que cuando llamemos a un archivo le demos el path apropiado ("...\Instar\calibracion_validacion\fuentes_datos_validacion\COPLAS_PLAGAS"). Pero tambien se puede definir el directorio de manera manual (Session > Set Working Directory > Choose Directory), y asi R si acepta que sea una carpeta distinta a donde esta el proyecto. Por mi las dos opciones valen, la que te sea mas facil :)~~
 
-Definir como directorio la carpeta: Instar>implementaciones>instar_baza>scripts>git_Instar_baza>git_Instar_baza
-Para poner esta carpeta he copiado los archivos de los que se alimenta este codigo, que son:
-- zona_baza.csv (Datos de COPLAS en Baza)
-- cortijuela.csv (Datos de COPLAS en Sierra Nevada)
-- instar_bz008 (Datos Instar)
-- instar_bz006
-- instar_sn020
-- instar_sn021
+~~He definido el WD de manera manual.~~ 
+
+~~Definir como directorio la carpeta:~~ ~~Instar>implementaciones>instar_baza>scripts>git_Instar_baza>git_Instar_baza
+Para poner esta carpeta he copiado los archivos de los que se alimenta este codigo, que son:~~
+~~- zona_baza.csv (Datos de COPLAS en Baza)~~
+~~- cortijuela.csv (Datos de COPLAS en Sierra Nevada)~~
+~~- instar_bz008 (Datos Instar)~~
+~~- instar_bz006~~
+~~- instar_sn020~~
+~~- instar_sn021~~
 
 # Cargar paquetes
 ```{r}
