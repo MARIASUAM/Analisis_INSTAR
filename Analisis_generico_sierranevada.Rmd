@@ -1,0 +1,381 @@
+---
+title: "Analisis_generico_sierranevada"
+author: "Almudena Blanco"
+date: "September 13, 2016"
+output: html_document
+---
+# Definir directorio de trabajo
+
+Aqui probablemente el codigo te dara problemas, porque queremos definir como directorio de trabajo la carpeta de COPLAS porque los archivos estan ahi. Como este Markdown esta dentro de un Proyecto con su carpeta asociada, R entiende que el directorio es ese (".../Instar/implementaciones/instar_baza/scripts/git_Instar_baza"). Estrictamente hablando deberiamos escribir el codigo de manera que cuando llamemos a un archivo le demos el path apropiado ("...\Instar\calibracion_validacion\fuentes_datos_validacion\COPLAS_PLAGAS"). Pero tambien se puede definir el directorio de manera manual (Session > Set Working Directory > Choose Directory), y asi R si acepta que sea una carpeta distinta a donde esta el proyecto. Por mi las dos opciones valen, la que te sea mas facil :)
+
+He definido el WD de manera manual. 
+
+Definir como directorio la carpeta: Instar>implementaciones>instar_baza>scripts>git_Instar_baza>git_Instar_baza
+Para poner esta carpeta he copiado los archivos de los que se alimenta este codigo, que son:
+- zona_baza.csv (Datos de COPLAS en Baza)
+- cortijuela.csv (Datos de COPLAS en Sierra Nevada)
+- instar_bz008 (Datos Instar)
+- instar_bz006
+- instar_sn020
+- instar_sn021
+
+# Cargar paquetes
+```{r}
+#install.packages("lubridate")
+library(lubridate) # Para las fechas
+```
+
+# DATOS INSTAR
+
+## Importar datos INSTAR 
+
+- La tabla de datos se construye en excel y se guarda como .csv
+- Se abre con procesador de texto, y se comprueba que la fecha está en formato mm-dd-yy
+- Se guarda como .txt
+ Las columnas que constituyen la tabla son: fecha, huevo, L1, L2, crisalida, radiacion, tmax, tmin, tmed y exergia.
+
+
+TOMAMOS EL RODAL GR-023-008 (Sierra de Baza) COMO EJEMPLO
+```{r}
+INSTAR<-read.table("instar_sn020.txt", header=T, sep=",", dec=".")
+INSTAR$fecha <-as.Date(INSTAR$fecha, format="%m-%d-%y")#aunque pongo formato mm/dd/yyyy se pone como yyyy-mm-dd
+```
+
+## Anadir biociclos al data.frame
+```{r}
+INSTAR$yday <- yday(INSTAR$fecha) # anadimos el dia del anio con el paquete lubridate
+INSTAR$year <- year(INSTAR$fecha) # anadimos el anio con el paquete lubridate
+INSTAR$biociclo <- NULL
+#write.csv(INSTAR, file = "datos_instar_bz008.csv", row.names=FALSE, na="")
+```
+
+
+```{r}
+subset_2001 <- subset(INSTAR, INSTAR$year==2001)
+for(i in 1:length(subset_2001$yday)){
+  ifelse(subset_2001$yday[i]<=79, 
+       subset_2001$biociclo[i] <- 1, subset_2001$biociclo[i] <- 2)
+}
+
+subset_2002 <- subset(INSTAR, INSTAR$year==2002)
+for(i in 1:length(subset_2002$yday)){
+  ifelse(subset_2002$yday[i]<=79, 
+       subset_2002$biociclo[i] <- 2, subset_2002$biociclo[i] <- 3)
+}
+
+subset_2003 <- subset(INSTAR, INSTAR$year==2003)
+for(i in 1:length(subset_2003$yday)){
+  ifelse(subset_2003$yday[i]<=79, 
+       subset_2003$biociclo[i] <- 3, subset_2003$biociclo[i] <- 4)
+}
+
+subset_2004 <- subset(INSTAR, INSTAR$year==2004)
+for(i in 1:length(subset_2004$yday)){
+  ifelse(subset_2004$yday[i]<=79, 
+       subset_2004$biociclo[i] <- 4, subset_2004$biociclo[i] <- 5)
+}
+subset_2005 <- subset(INSTAR, INSTAR$year==2005)
+for(i in 1:length(subset_2005$yday)){
+  ifelse(subset_2005$yday[i]<=79, 
+       subset_2005$biociclo[i] <- 5, subset_2005$biociclo[i] <- 6)
+}
+
+subset_2006 <- subset(INSTAR, INSTAR$year==2006)
+for(i in 1:length(subset_2006$yday)){
+  ifelse(subset_2006$yday[i]<=79, 
+       subset_2006$biociclo[i] <- 6, subset_2006$biociclo[i] <- 7)
+}
+
+subset_2007 <- subset(INSTAR, INSTAR$year==2007)
+for(i in 1:length(subset_2007$yday)){
+  ifelse(subset_2007$yday[i]<=79, 
+       subset_2007$biociclo[i] <- 7, subset_2007$biociclo[i] <- 8)
+}
+
+subset_2008 <- subset(INSTAR, INSTAR$year==2008)
+for(i in 1:length(subset_2008$yday)){
+  ifelse(subset_2008$yday[i]<=79, 
+       subset_2008$biociclo[i] <- 8, subset_2008$biociclo[i] <- 9)
+}
+
+subset_2009 <- subset(INSTAR, INSTAR$year==2009)
+for(i in 1:length(subset_2009$yday)){
+  ifelse(subset_2009$yday[i]<=79, 
+       subset_2009$biociclo[i] <- 9, subset_2009$biociclo[i] <- 10)
+}
+
+subset_2010 <- subset(INSTAR, INSTAR$year==2010)
+for(i in 1:length(subset_2010$yday)){
+  ifelse(subset_2010$yday[i]<=79, 
+       subset_2010$biociclo[i] <- 10, subset_2010$biociclo[i] <- 11)
+}
+
+subset_2011 <- subset(INSTAR, INSTAR$year==2011)
+for(i in 1:length(subset_2011$yday)){
+  ifelse(subset_2011$yday[i]<=79, 
+       subset_2011$biociclo[i] <- 11, subset_2011$biociclo[i] <- 12)
+}
+
+subset_2012 <- subset(INSTAR, INSTAR$year==2012)
+for(i in 1:length(subset_2012$yday)){
+  ifelse(subset_2012$yday[i]<=79, 
+       subset_2012$biociclo[i] <- 12, subset_2012$biociclo[i] <- 13)
+}
+
+subset_2013 <- subset(INSTAR, INSTAR$year==2013)
+for(i in 1:length(subset_2013$yday)){
+  ifelse(subset_2013$yday[i]<=79, 
+       subset_2013$biociclo[i] <- 13, subset_2013$biociclo[i] <- 14)
+}
+
+subset_2014 <- subset(INSTAR, INSTAR$year==2014)
+for(i in 1:length(subset_2014$yday)){
+  ifelse(subset_2014$yday[i]<=79, 
+       subset_2014$biociclo[i] <- 14, subset_2014$biociclo[i] <- 15)
+}
+
+INSTAR<- rbind(subset_2002, subset_2003, subset_2004, subset_2005, subset_2006, subset_2007, subset_2008, subset_2009, subset_2010, subset_2011, subset_2012, subset_2013, subset_2014)
+
+#QUITAR BIOCICLO 2 y 15(incompletos)
+INSTAR<-INSTAR[!(INSTAR$biociclo=="2"),]
+INSTAR<-INSTAR[!(INSTAR$biociclo=="15"),]
+```
+
+## Agregacion INSTAR
+
+Media del vigor y sumas (l1, l2 y l1+l2) por biociclo
+
+```{r}
+sum_l1<- aggregate(x = INSTAR$L1, by=list(biociclo=INSTAR$biociclo), FUN=sum, na.rm=TRUE)
+names(sum_l1)[2] <- "sum_l1"
+
+sum_l2<- aggregate(x = INSTAR$L2, by=list(biociclo=INSTAR$biociclo), FUN=sum, na.rm=TRUE)
+names(sum_l2)[2] <- "sum_l2"
+
+larvas<-cbind(sum_l1, sum_l2)
+larvas<-larvas[-c(3)]
+larvas$sum_l1l2=larvas[,2]+larvas[,3]
+
+sum_huevo<- aggregate(x = INSTAR$huevo, by=list(biociclo=INSTAR$biociclo), FUN=sum, na.rm=TRUE)
+names(sum_huevo)[2] <- "sum_huevo"
+
+sum_crisalida<- aggregate(x = INSTAR$crisalida, by=list(biociclo=INSTAR$biociclo), FUN=sum, na.rm=TRUE)
+names(sum_crisalida)[2] <- "sum_crisalida"
+
+avg_exergia<-aggregate(INSTAR$exergia, by=list(biociclo=INSTAR$biociclo), FUN=mean, na.rm=TRUE)
+names(avg_exergia)[2] <- "avg_exergia"
+
+
+agreg_INSTAR <- cbind(larvas,avg_exergia, sum_crisalida, sum_huevo)
+agreg_INSTAR_biociclo <- agreg_INSTAR[ -c(5, 7, 9) ]
+
+#write.csv(agreg_INSTAR_biociclo,"agreg_INSTAR_bz008_biociclo.csv",row.names=FALSE, na="")
+```
+
+# DATOS COPLAS
+
+## Importar datos COPLAS 
+
+```{r}
+COPLAS<-read.csv("cortijuela.csv", header=TRUE, sep="," , na.strings = "NA")
+names(COPLAS)[1]<- "RODAL"
+```
+
+Activar el rodal necesario para el analisis:
+
+```{r}
+#rodal<-subset(COPLAS, RODAL == "GR000030")
+#rodal<-subset(COPLAS, RODAL == "GR134018")
+rodal<-subset(COPLAS, RODAL == "GR134020")
+#rodal<-subset(COPLAS, RODAL == "GR134021")
+```
+
+```{r}
+#Eliminar primer y ultimo anio porque en Instar no teneos datos de ese anio completo. 
+rodal<-rodal[-c(1:9, 22),]
+```
+
+## Definir biociclo COPLAS (opcional)
+```{r}
+rodal$biociclo <- 3:14 #Sierra Nevada
+```
+
+##Crear una tabla unica en la que tengamos los datos agregados de Instar y los datos de COPLAS
+En esta tabla aparecen los datos de Instar agregados, los Ln de sumL1, sumL2 y sumL1+sumL2, el anio y el grado de infestacion de COPLAS. 
+```{r}
+COPLAS_INSTAR<-merge.data.frame(agreg_INSTAR_biociclo, rodal, by.x = "biociclo")
+COPLAS_INSTAR<-COPLAS_INSTAR[-c(8)] #Eliminar la columna con el nombre del rodal
+COPLAS_INSTAR_omit<-na.omit(COPLAS_INSTAR)#Eliminar filas donde datos de COPLAS sean 'na'
+```
+
+
+# VALIDACION EXTERNA
+
+```{r}
+library(graphics)
+library(ggplot2)
+```
+
+## Correlacion [L1, L2, L1+L2 vs. COPLAS]
+
+Ya que es dificil explicar que una variable es dependiente de otra. La mejor forma de validar el modelo (con datos reales) es haciendo una correlacion. Con este analisis sabremos si existe relacion o no entre la variable Instar y COPLAS. Sabremos tambien la intensidad de esta relacion y si es significativa.
+Como nuestros datos no siguen una distribucion normal, haremos una correlacion con datos no parametricos: 'Spearman'
+
+Funcion en R (pedir a Antonio este codigo) que plotea la relacion entre ellos con un circulo (cuanto mas relacionados, mas grande el circulo) y si es negativa o positiva. Da tambien el p valor de la correlacion. *"Puedo tener fuerte relacion pero el coef no es diferente de 0, a lo mejor con mas datos si."*" 
+
+Deberiamos esperar que haya mas relacion entre coplas y exergia, luego coplas y larvas. Cuando hay relacion negativa es que es inversa. Y como no sabemos quien es x e y, quiere decir que cuando una aumenta, otra disminuye, peor no sabemos quien aumente y quien disminuye. 
+
+```{r, echo=FALSE}
+library(corrplot)
+```
+
+```{r, echo=FALSE}
+#Preparamos una tabla con las variables que se van a correlacionar
+tabla_cor<-COPLAS_INSTAR_omit[-c(1, 6, 7, 8)]
+#Hacemos la correlacion
+correlacion<-cor(tabla_cor, method = "spearman")
+#Calculo significancia
+cor.mtest <- function(mat, conf.level = 0.95){
+  mat <- as.matrix(mat)
+    n <- ncol(mat)
+    p.mat <- lowCI.mat <- uppCI.mat <- matrix(NA, n, n)
+    diag(p.mat) <- 0
+    diag(lowCI.mat) <- diag(uppCI.mat) <- 1
+    for(i in 1:(n-1)){
+        for(j in (i+1):n){
+            tmp <- cor.test(mat[,i], mat[,j], conf.level = conf.level)
+            p.mat[i,j] <- p.mat[j,i] <- tmp$p.value
+            lowCI.mat[i,j] <- lowCI.mat[j,i] <- tmp$conf.int[1]
+            uppCI.mat[i,j] <- uppCI.mat[j,i] <- tmp$conf.int[2]
+        }
+    }
+    return(list(p.mat, lowCI.mat, uppCI.mat))
+}
+res1 <- cor.mtest(tabla_cor,0.95)
+
+#Plot
+corrplot(correlacion, p.mat = res1[[1]], sig.level=0.05, method = "number", type = "upper", tl.col = "black", number.cex = 1.5)
+```
+
+La correlacion se ha realizado en en los biociclos donde existen datos de COPLAS. Esto nos deja con solo diez biociclos.
+
+Sale muy buena relacion entre la exergia y el dato de COPLAS!!!
+# VALIDACION INTERNA
+
+##ACP
+Autocorrelation plot. 
+Nos ayudara a saber si existen ciclos dentro de toda la serie temporal. 
+ESTE ANALISIS SOLO SE HACE CON LOS DATOS DE BAZA Pero voy a probar con los datos de Sierra Nevada
+"*Those plots are showing you the correlation of the series with itself, lagged by x time unitscorrelation of the series with itself, lagged by x time units. So imagine taking your time series of length TT, copying it, and deleting the first observation of copy#1 and the last observation of copy#2. Now you have two series of length T for which you calculate a correlation coefficient. This is the value of of the vertical axis at x=1 in your plots. It represents the correlation of the series lagged by one time unit. You go on and do this for all possible time lags xx and this defines the plot*.
+
+*The answer to your question of what is needed to report a pattern is dependent on what pattern you would like to report. But quantitatively speaking, you have exactly what I just described: the correlation coefficient at different lags of the series. You can extract these numerical values by issuing the command  acf(x.ts,100)$acf*.
+
+*In terms of what lag to use, this is again a matter of context. It is often the case that there will be specific lags of interest. Say, for example, you may believe the fish species migrates to and from an area every ~30 days. This may lead you to hypothesize a correlation in the time series at lags of 30. In this case, you would have support for your hypothesis*"
+
+"*The blue lines give the values beyond which the autocorrelations are (statistically) significantly different from zero*" 
+
+Hay que definir el LAG. lag.max= Lo hemos definido como el numero de biociclos.
+
+```{r, , fig.show='asis'}
+exergia_ts_y<-ts(agreg_INSTAR_biociclo$avg_exergia, frequency = 1)
+exergia_acf_y<-acf(exergia_ts_y, type=c("correlation"), plot=TRUE, lag.max = 12)
+
+L1_ts_y<-ts(agreg_INSTAR_biociclo$sum_l1, frequency = 1)
+L1_acf_y<-acf(L1_ts_y, type=c("correlation"), plot=TRUE, lag.max = 12)
+
+L2_ts_y<-ts(agreg_INSTAR_biociclo$sum_l2, frequency = 1)
+L2_acf_y<-acf(L2_ts_y, type=c("correlation"), plot=TRUE, lag.max = 12)
+
+huevo_ts_y<-ts(agreg_INSTAR_biociclo$sum_huevo, frequency = 1)
+huevo_acf_y<-acf(huevo_ts_y, type=c("correlation"), plot=TRUE, lag.max = 12)
+
+crisalida_ts_y<-ts(agreg_INSTAR_biociclo$sum_crisalida, frequency = 1)
+crisalida_acf_y<-acf(crisalida_ts_y, type=c("correlation"), plot=TRUE, lag.max = 12)
+
+#Mirar ACF de COPLAS
+coplas_ts<-ts(COPLAS$GRADO.REVISADO, frequency = 1)
+coplas_acf<-acf(coplas_ts, type=c("correlation"), plot=TRUE, lag.max = 12)
+```
+
+**CORRELOGRAMAS INSTAR**
+
+**CORRELOGRAMA COPLAS**
+Los Lags 1, 5, 6 y 17 son significativos. ??
+
+##Analisis de tendencia
+Se eligen indicadores de cada variable para calcular su tendencia.
+
+En las variables huevo, L1, L2 y crisalida:
+- Fecha del maximo. 
+- Fecha del primer dia distinto a cero
+- Fecha del ultimo dia distinto a cero
+
+
+En la variable exergia:
+- Fecha del maximo
+- Fecha del minimo. 
+
+*Nota: se puede calcular el minimo sin contar el 0? Como arrastras dia del anio? >>Preguntar a Maria
+
+```{r, fig.show='asis'}
+max_huevo<-aggregate(x = INSTAR$huevo, by=list(biociclo=INSTAR$biociclo), FUN=max, na.rm=TRUE)
+names(max_huevo)[2] <- "max_huevo"
+tend_huevo<-lm(max_huevo)
+summary(tend_huevo)
+plot(max_huevo)
+dev.off()
+```
+
+```{r}
+max_L1<-aggregate(x = INSTAR$L1, by=list(biociclo=INSTAR$biociclo), FUN=max, na.rm=TRUE)
+names(max_L1)[2] <- "max_L1"
+tend_L1<-lm(max_L1)
+summary(tend_L1)
+plot(max_L1)
+abline(tend_L1)
+dev.off()
+```
+
+
+```{r}
+max_L2<-aggregate(x = INSTAR$L2, by=list(biociclo=INSTAR$biociclo), FUN=max, na.rm=TRUE)
+names(max_L2)[2] <- "max_L2"
+tend_L2<-lm(max_L2)
+summary(tend_L2)
+plot(max_L2)
+abline(tend_L2)
+dev.off()
+```
+
+
+```{r}
+max_crisalida<-aggregate(x = INSTAR$crisalida, by=list(biociclo=INSTAR$biociclo), FUN=max, na.rm=TRUE)
+names(max_crisalida)[2] <- "max_crisalida"
+tend_crisalida<-lm(max_crisalida)
+summary(tend_crisalida)
+plot(max_crisalida)
+abline(tend_crisalida)
+dev.off()
+```
+
+```{r}
+max_exergia<-aggregate(x = INSTAR$exergia, by=list(biociclo=INSTAR$biociclo), FUN=max, na.rm=TRUE)
+names(max_exergia)[2] <- "max_exergia"
+tend_exergia_mx<-lm(max_exergia)
+summary(tend_exergia_mx)
+plot(max_exergia)
+abline(tend_exergia_mx)
+dev.off()
+```
+
+
+```{r}
+min_exergia<-aggregate(x = INSTAR$exergia, by=list(biociclo=INSTAR$biociclo), FUN=min, na.rm=TRUE)
+names(min_exergia)[2] <- "min_exergia"
+tend_exergia_mn<-lm(min_exergia)
+summary(tend_exergia_mn)
+plot(min_exergia)
+abline(tend_exergia_mn)
+dev.off()
+```
+
